@@ -1,0 +1,625 @@
+<!DOCTYPE html>
+<html lang="hy">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+<meta name="apple-mobile-web-app-title" content="Կկ">
+<meta name="theme-color" content="#0e0e0e">
+<title>Կալորիա</title>
+<style>
+  * { margin: 0; padding: 0; box-sizing: border-box; -webkit-tap-highlight-color: transparent; }
+
+  body {
+    background: #0e0e0e;
+    color: #f0ede6;
+    font-family: 'Georgia', serif;
+    min-height: 100vh;
+    min-height: -webkit-fill-available;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    padding: 48px 20px 60px;
+  }
+
+  /* LOGIN SCREEN */
+  #loginScreen {
+    width: 100%;
+    max-width: 400px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    padding-top: 60px;
+  }
+
+  .login-title {
+    font-size: 11px;
+    letter-spacing: 6px;
+    color: #444;
+    text-transform: uppercase;
+    margin-bottom: 48px;
+    font-family: 'Helvetica Neue', sans-serif;
+  }
+
+  .login-big {
+    font-size: 48px;
+    font-weight: normal;
+    letter-spacing: -2px;
+    margin-bottom: 48px;
+    color: #f0ede6;
+  }
+
+  .field-label {
+    font-size: 10px;
+    letter-spacing: 3px;
+    color: #444;
+    text-transform: uppercase;
+    font-family: 'Helvetica Neue', sans-serif;
+    margin-bottom: 6px;
+    align-self: flex-start;
+    width: 100%;
+  }
+
+  .login-input {
+    width: 100%;
+    background: #161616;
+    border: 1px solid #2a2a2a;
+    border-radius: 10px;
+    padding: 14px 16px;
+    color: #f0ede6;
+    font-size: 16px;
+    font-family: 'Georgia', serif;
+    outline: none;
+    margin-bottom: 16px;
+    transition: border-color 0.2s;
+  }
+  .login-input:focus { border-color: #444; }
+  .login-input::placeholder { color: #2e2e2e; }
+
+  .user-list {
+    width: 100%;
+    margin-bottom: 24px;
+  }
+
+  .user-chip {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    background: #1a1a1a;
+    border: 1px solid #2a2a2a;
+    border-radius: 20px;
+    padding: 8px 14px;
+    margin: 4px;
+    font-size: 13px;
+    font-family: 'Helvetica Neue', sans-serif;
+    cursor: pointer;
+    transition: all 0.2s;
+    color: #888;
+  }
+  .user-chip:active { background: #f0ede6; color: #0e0e0e; }
+
+  .user-chip-del {
+    color: #333;
+    font-size: 16px;
+    line-height: 1;
+    padding: 0 2px;
+  }
+
+  /* MAIN APP */
+  #appScreen { display: none; width: 100%; flex-direction: column; align-items: center; }
+
+  .top-bar {
+    width: 100%;
+    max-width: 400px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 32px;
+  }
+
+  .current-user {
+    font-size: 10px;
+    letter-spacing: 4px;
+    color: #444;
+    text-transform: uppercase;
+    font-family: 'Helvetica Neue', sans-serif;
+  }
+
+  .switch-btn {
+    font-size: 10px;
+    letter-spacing: 2px;
+    color: #333;
+    text-transform: uppercase;
+    font-family: 'Helvetica Neue', sans-serif;
+    background: none;
+    border: none;
+    cursor: pointer;
+    transition: color 0.2s;
+  }
+  .switch-btn:active { color: #888; }
+
+  .header { text-align: center; margin-bottom: 28px; width: 100%; max-width: 400px; }
+
+  .total-kcal {
+    font-size: 56px;
+    font-weight: normal;
+    letter-spacing: -2px;
+    line-height: 1;
+  }
+  .total-kcal span { font-size: 20px; color: #666; margin-left: 4px; }
+
+  .remaining {
+    font-size: 13px;
+    margin-top: 8px;
+    font-family: 'Helvetica Neue', sans-serif;
+    letter-spacing: 0.5px;
+  }
+  .remaining.ok { color: #7eb88a; }
+  .remaining.over { color: #e07070; }
+
+  .progress-wrap {
+    width: 100%;
+    max-width: 400px;
+    height: 3px;
+    background: #1e1e1e;
+    border-radius: 2px;
+    margin-bottom: 32px;
+    overflow: hidden;
+  }
+
+  .progress-bar {
+    height: 100%;
+    border-radius: 2px;
+    transition: width 0.5s ease, background 0.3s;
+  }
+
+  .api-key-area {
+    width: 100%;
+    max-width: 400px;
+    margin-bottom: 20px;
+  }
+
+  .api-key-area input {
+    width: 100%;
+    background: #161616;
+    border: 1px solid #2a2a2a;
+    border-radius: 10px;
+    padding: 12px 16px;
+    color: #f0ede6;
+    font-size: 13px;
+    font-family: 'Helvetica Neue', sans-serif;
+    outline: none;
+    transition: border-color 0.2s;
+  }
+  .api-key-area input:focus { border-color: #444; }
+  .api-key-area input::placeholder { color: #2e2e2e; }
+
+  .input-area {
+    width: 100%;
+    max-width: 400px;
+    margin-bottom: 24px;
+  }
+
+  textarea {
+    width: 100%;
+    background: #161616;
+    border: 1px solid #2a2a2a;
+    border-radius: 10px;
+    padding: 14px 16px;
+    color: #f0ede6;
+    font-size: 16px;
+    font-family: 'Georgia', serif;
+    resize: none;
+    outline: none;
+    line-height: 1.5;
+    transition: border-color 0.2s;
+  }
+  textarea:focus { border-color: #444; }
+  textarea::placeholder { color: #3a3a3a; }
+
+  button.submit {
+    width: 100%;
+    margin-top: 10px;
+    background: #f0ede6;
+    color: #0e0e0e;
+    border: none;
+    border-radius: 10px;
+    padding: 15px;
+    font-size: 11px;
+    letter-spacing: 3px;
+    text-transform: uppercase;
+    cursor: pointer;
+    font-family: 'Helvetica Neue', sans-serif;
+    font-weight: 500;
+    transition: opacity 0.2s, transform 0.1s;
+  }
+  button.submit:active { transform: scale(0.98); opacity: 0.9; }
+  button.submit:disabled { opacity: 0.3; cursor: default; }
+
+  .error {
+    color: #e07070;
+    font-size: 12px;
+    text-align: center;
+    margin-top: 8px;
+    font-family: 'Helvetica Neue', sans-serif;
+  }
+
+  .day-tabs {
+    display: flex;
+    gap: 6px;
+    margin-bottom: 16px;
+    flex-wrap: wrap;
+    justify-content: center;
+    max-width: 400px;
+    width: 100%;
+  }
+
+  .day-tab {
+    background: #161616;
+    border: 1px solid #2a2a2a;
+    border-radius: 6px;
+    padding: 6px 12px;
+    font-size: 11px;
+    color: #555;
+    cursor: pointer;
+    font-family: 'Helvetica Neue', sans-serif;
+    transition: all 0.2s;
+  }
+  .day-tab.active { background: #f0ede6; color: #0e0e0e; border-color: #f0ede6; }
+
+  .entries { width: 100%; max-width: 400px; }
+
+  .entry {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 13px 0;
+    border-bottom: 1px solid #1a1a1a;
+    animation: fadeIn 0.3s ease;
+  }
+
+  @keyframes fadeIn {
+    from { opacity: 0; transform: translateY(-6px); }
+    to { opacity: 1; transform: translateY(0); }
+  }
+
+  .entry-name { font-size: 15px; color: #d0cdc6; flex: 1; padding-right: 12px; }
+
+  .entry-right { display: flex; align-items: center; gap: 10px; flex-shrink: 0; }
+
+  .entry-kcal { font-size: 16px; font-variant-numeric: tabular-nums; }
+  .entry-kcal span { font-size: 11px; color: #555; margin-left: 2px; }
+
+  .del-btn {
+    background: none; border: none; color: #333;
+    font-size: 20px; cursor: pointer; padding: 0 2px; line-height: 1;
+    transition: color 0.2s;
+  }
+  .del-btn:active { color: #e07070; }
+
+  .total-row {
+    display: flex; justify-content: space-between;
+    padding: 16px 0; border-top: 1px solid #2a2a2a; margin-top: 4px;
+  }
+  .total-row-label {
+    font-size: 10px; letter-spacing: 3px; text-transform: uppercase;
+    color: #555; font-family: 'Helvetica Neue', sans-serif; align-self: center;
+  }
+  .total-row-val { font-size: 20px; }
+
+  .empty {
+    text-align: center; color: #2e2e2e; font-size: 14px;
+    padding: 40px 0; font-family: 'Helvetica Neue', sans-serif;
+  }
+
+  .goal-note {
+    margin-top: 48px; font-size: 10px; color: #2a2a2a;
+    letter-spacing: 3px; font-family: 'Helvetica Neue', sans-serif; text-transform: uppercase;
+  }
+</style>
+</head>
+<body>
+
+<!-- LOGIN SCREEN -->
+<div id="loginScreen">
+  <div class="login-title">Կալորիաների Հաշվիչ</div>
+  <div class="login-big">Ո՞վ ես</div>
+
+  <div class="field-label">Անուն</div>
+  <input class="login-input" id="nameInput" type="text" placeholder="Արամ, Մարո..." autocomplete="off"
+    onkeydown="if(event.key==='Enter') loginUser()" />
+
+  <button class="submit" onclick="loginUser()" style="max-width:400px; width:100%; margin-bottom:32px;">Մուտք</button>
+
+  <div class="user-list" id="userList"></div>
+</div>
+
+<!-- MAIN APP -->
+<div id="appScreen">
+  <div class="top-bar">
+    <div class="current-user" id="currentUserLabel"></div>
+    <button class="switch-btn" onclick="logout()">Փոխել</button>
+  </div>
+
+  <div class="header">
+    <div class="total-kcal" id="totalDisplay">0 <span>կկ</span></div>
+    <div class="remaining ok" id="remainingDisplay">Մնաց 1500 կկ</div>
+  </div>
+
+  <div class="progress-wrap">
+    <div class="progress-bar" id="progressBar" style="width:0%; background:#7eb88a;"></div>
+  </div>
+
+  <div class="api-key-area">
+    <div class="field-label">Anthropic API Key</div>
+    <input type="password" id="apiKey" placeholder="sk-ant-..." oninput="saveKey(this.value)" />
+  </div>
+
+  <div class="input-area">
+    <textarea id="foodInput" rows="3" placeholder="Գրիր ինչ կերար... (հայերեն կամ ռուսերեն)"></textarea>
+    <button class="submit" id="submitBtn" onclick="analyze()">Հաշվել</button>
+    <div class="error" id="errorMsg"></div>
+  </div>
+
+  <div class="day-tabs" id="dayTabs"></div>
+  <div class="entries" id="entriesList"></div>
+  <div class="goal-note">Նպատակ — 1500 կկ</div>
+</div>
+
+<script>
+const GOAL = 1500;
+const STORAGE_USERS = "kcal_users_v1";     // {username: {days:{}, apiKey:""}}
+const STORAGE_LAST  = "kcal_last_user";
+
+let allUsers = {};
+let currentUser = null;
+let activeDay = todayKey();
+
+function todayKey() {
+  return new Date().toISOString().slice(0, 10);
+}
+
+// ── PERSISTENCE ──────────────────────────────────────────────
+function loadAll() {
+  try { allUsers = JSON.parse(localStorage.getItem(STORAGE_USERS)) || {}; } catch { allUsers = {}; }
+}
+
+function saveAll() {
+  localStorage.setItem(STORAGE_USERS, JSON.stringify(allUsers));
+}
+
+function getUserData() {
+  if (!allUsers[currentUser]) allUsers[currentUser] = { days: {}, apiKey: "" };
+  return allUsers[currentUser];
+}
+
+// ── LOGIN ─────────────────────────────────────────────────────
+function loginUser() {
+  const name = document.getElementById("nameInput").value.trim();
+  if (!name) return;
+  currentUser = name;
+  localStorage.setItem(STORAGE_LAST, name);
+  if (!allUsers[name]) allUsers[name] = { days: {}, apiKey: "" };
+  saveAll();
+  activeDay = todayKey();
+  showApp();
+}
+
+function logout() {
+  currentUser = null;
+  document.getElementById("appScreen").style.display = "none";
+  document.getElementById("loginScreen").style.display = "flex";
+  document.getElementById("loginScreen").style.flexDirection = "column";
+  document.getElementById("loginScreen").style.alignItems = "center";
+  document.getElementById("nameInput").value = "";
+  renderUserList();
+}
+
+function showApp() {
+  document.getElementById("loginScreen").style.display = "none";
+  const app = document.getElementById("appScreen");
+  app.style.display = "flex";
+  app.style.flexDirection = "column";
+  app.style.alignItems = "center";
+  document.getElementById("currentUserLabel").textContent = currentUser;
+
+  // Load api key for this user
+  const ud = getUserData();
+  document.getElementById("apiKey").value = ud.apiKey || "";
+  render();
+}
+
+function renderUserList() {
+  const keys = Object.keys(allUsers);
+  const list = document.getElementById("userList");
+  list.innerHTML = keys.length ? '<div class="field-label" style="margin-bottom:12px;">Նախկին օգտատերեր</div>' : "";
+  keys.forEach(name => {
+    const chip = document.createElement("span");
+    chip.className = "user-chip";
+    chip.innerHTML = `<span onclick="quickLogin('${name}')">${name}</span><span class="user-chip-del" onclick="deleteUser(event,'${name}')">×</span>`;
+    list.appendChild(chip);
+  });
+}
+
+function quickLogin(name) {
+  document.getElementById("nameInput").value = name;
+  loginUser();
+}
+
+function deleteUser(e, name) {
+  e.stopPropagation();
+  delete allUsers[name];
+  saveAll();
+  renderUserList();
+}
+
+// ── DATA ──────────────────────────────────────────────────────
+function saveKey(v) {
+  const ud = getUserData();
+  ud.apiKey = v;
+  saveAll();
+}
+
+function getDay(k) {
+  const ud = getUserData();
+  return ud.days[k] || { entries: [] };
+}
+
+function removeEntry(id) {
+  const ud = getUserData();
+  if (!ud.days[activeDay]) return;
+  ud.days[activeDay].entries = ud.days[activeDay].entries.filter(e => e.id !== id);
+  saveAll();
+  render();
+}
+
+// ── RENDER ────────────────────────────────────────────────────
+function render() {
+  const day = getDay(activeDay);
+  const total = day.entries.reduce((s, e) => s + e.kcal, 0);
+  const remaining = GOAL - total;
+  const pct = Math.min((total / GOAL) * 100, 100);
+
+  document.getElementById("totalDisplay").innerHTML = `${total} <span>կկ</span>`;
+
+  const remEl = document.getElementById("remainingDisplay");
+  if (remaining >= 0) {
+    remEl.textContent = `Մնաց ${remaining} կկ`;
+    remEl.className = "remaining ok";
+  } else {
+    remEl.textContent = `Գերազանցել ես ${Math.abs(remaining)} կկ-ով`;
+    remEl.className = "remaining over";
+  }
+
+  const bar = document.getElementById("progressBar");
+  bar.style.width = pct + "%";
+  bar.style.background = pct > 100 ? "#e07070" : pct > 80 ? "#e0b870" : "#7eb88a";
+
+  // Day tabs
+  const ud = getUserData();
+  const allKeys = Object.keys(ud.days).sort().reverse();
+  if (!allKeys.includes(activeDay)) allKeys.unshift(activeDay);
+  const tabs = document.getElementById("dayTabs");
+  tabs.innerHTML = "";
+  if (allKeys.length > 1) {
+    allKeys.forEach(k => {
+      const btn = document.createElement("button");
+      btn.className = "day-tab" + (k === activeDay ? " active" : "");
+      btn.textContent = k;
+      btn.onclick = () => { activeDay = k; render(); };
+      tabs.appendChild(btn);
+    });
+  }
+
+  // Entries
+  const list = document.getElementById("entriesList");
+  list.innerHTML = "";
+
+  if (day.entries.length === 0) {
+    list.innerHTML = `<div class="empty">Դեռ ոչինչ չես գրել</div>`;
+    return;
+  }
+
+  day.entries.forEach(entry => {
+    const row = document.createElement("div");
+    row.className = "entry";
+    row.innerHTML = `
+      <div class="entry-name">${entry.name}</div>
+      <div class="entry-right">
+        <div class="entry-kcal">${entry.kcal}<span>կկ</span></div>
+        <button class="del-btn" onclick="removeEntry('${entry.id}')">×</button>
+      </div>
+    `;
+    list.appendChild(row);
+  });
+
+  const totalRow = document.createElement("div");
+  totalRow.className = "total-row";
+  totalRow.innerHTML = `<div class="total-row-label">Ընդամենը</div><div class="total-row-val">${total} կկ</div>`;
+  list.appendChild(totalRow);
+}
+
+// ── AI ANALYZE ────────────────────────────────────────────────
+async function analyze() {
+  const input = document.getElementById("foodInput").value.trim();
+  const apiKey = document.getElementById("apiKey").value.trim();
+  const btn = document.getElementById("submitBtn");
+  const err = document.getElementById("errorMsg");
+
+  if (!input) return;
+  if (!apiKey) { err.textContent = "API key մուտքագրիր"; return; }
+
+  err.textContent = "";
+  btn.disabled = true;
+  btn.textContent = "Հաշվում...";
+
+  try {
+    const res = await fetch("https://api.anthropic.com/v1/messages", {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+        "x-api-key": apiKey,
+        "anthropic-version": "2023-06-01",
+        "anthropic-dangerous-direct-browser-access": "true"
+      },
+      body: JSON.stringify({
+        model: "claude-sonnet-4-5",
+        max_tokens: 1000,
+        system: `You are a calorie estimation assistant. The user describes food in Armenian or any language.
+Return ONLY a valid JSON object, no markdown, no explanation:
+{"items":[{"name":"...","kcal":number}],"total":number}
+Be realistic. For Armenian dishes use standard portions.`,
+        messages: [{ role: "user", content: input }]
+      })
+    });
+
+    const data = await res.json();
+    if (data.error) throw new Error(data.error.message);
+
+    const text = (data.content || []).find(b => b.type === "text")?.text || "";
+    const clean = text.replace(/```json|```/g, "").trim();
+    const parsed = JSON.parse(clean);
+
+    const ud = getUserData();
+    if (!ud.days[activeDay]) ud.days[activeDay] = { entries: [] };
+    parsed.items.forEach(item => {
+      ud.days[activeDay].entries.push({
+        id: Date.now() + "_" + Math.random().toString(36).slice(2),
+        name: item.name,
+        kcal: item.kcal
+      });
+    });
+
+    saveAll();
+    document.getElementById("foodInput").value = "";
+    render();
+  } catch(e) {
+    err.textContent = "Սխալ: " + (e.message || "Կրկնի՞ր");
+  }
+
+  btn.disabled = false;
+  btn.textContent = "Հաշվել";
+}
+
+// ── INIT ──────────────────────────────────────────────────────
+loadAll();
+
+// Auto-login last user
+const last = localStorage.getItem(STORAGE_LAST);
+if (last && allUsers[last]) {
+  currentUser = last;
+  showApp();
+} else {
+  renderUserList();
+  document.getElementById("loginScreen").style.display = "flex";
+  document.getElementById("loginScreen").style.flexDirection = "column";
+  document.getElementById("loginScreen").style.alignItems = "center";
+}
+
+document.getElementById("foodInput").addEventListener("keydown", e => {
+  if (e.key === "Enter" && !e.shiftKey) { e.preventDefault(); analyze(); }
+});
+</script>
+</body>
+</html>
