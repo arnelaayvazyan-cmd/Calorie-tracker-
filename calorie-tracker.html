@@ -198,6 +198,34 @@ function todayKey() { return new Date().toISOString().slice(0, 10); }
 
 function loadAll() {
   try { allUsers = JSON.parse(localStorage.getItem(STORAGE_USERS)) || {}; } catch { allUsers = {}; }
+  // Migrate from old versions
+  ["kcal_users_v1", "kcal_users_v2"].forEach(oldKey => {
+    try {
+      const old = JSON.parse(localStorage.getItem(oldKey));
+      if (old) {
+        Object.keys(old).forEach(user => {
+          if (!allUsers[user]) allUsers[user] = old[user];
+          else {
+            // merge days
+            Object.keys(old[user].days || {}).forEach(day => {
+              if (!allUsers[user].days[day]) allUsers[user].days[day] = old[user].days[day];
+            });
+          }
+        });
+        saveAll();
+      }
+    } catch {}
+  });
+  // Migrate from kcal_days_v2 (single-user old format)
+  try {
+    const oldDays = JSON.parse(localStorage.getItem("kcal_days_v2"));
+    const oldKey = localStorage.getItem("kcal_api_key");
+    const oldLast = localStorage.getItem(STORAGE_LAST);
+    if (oldDays && oldLast && !allUsers[oldLast]) {
+      allUsers[oldLast] = { days: oldDays, apiKey: oldKey || "" };
+      saveAll();
+    }
+  } catch {}
 }
 function saveAll() { localStorage.setItem(STORAGE_USERS, JSON.stringify(allUsers)); }
 
