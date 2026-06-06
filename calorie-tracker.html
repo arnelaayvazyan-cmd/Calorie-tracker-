@@ -10,13 +10,8 @@
 <title>Կալորիա</title>
 <style>
   * { margin: 0; padding: 0; box-sizing: border-box; -webkit-tap-highlight-color: transparent; }
-  body {
-    background: #0e0e0e; color: #f0ede6; font-family: 'Georgia', serif;
-    min-height: 100vh; display: flex; flex-direction: column; align-items: center;
-    padding: 48px 20px 80px;
-  }
+  body { background: #0e0e0e; color: #f0ede6; font-family: 'Georgia', serif; min-height: 100vh; display: flex; flex-direction: column; align-items: center; padding: 48px 20px 80px; }
 
-  /* LOGIN */
   #loginScreen { width: 100%; max-width: 400px; display: flex; flex-direction: column; align-items: center; padding-top: 60px; }
   .login-title { font-size: 10px; letter-spacing: 6px; color: #444; text-transform: uppercase; margin-bottom: 48px; font-family: 'Helvetica Neue', sans-serif; }
   .login-big { font-size: 48px; font-weight: normal; letter-spacing: -2px; margin-bottom: 48px; }
@@ -27,7 +22,6 @@
   .user-chip { display: inline-flex; align-items: center; gap: 8px; background: #1a1a1a; border: 1px solid #2a2a2a; border-radius: 20px; padding: 8px 14px; margin: 4px; font-size: 13px; font-family: 'Helvetica Neue', sans-serif; cursor: pointer; color: #888; }
   .user-chip-del { color: #333; font-size: 16px; line-height: 1; padding: 0 2px; }
 
-  /* APP */
   #appScreen { display: none; width: 100%; flex-direction: column; align-items: center; }
   .top-bar { width: 100%; max-width: 400px; display: flex; justify-content: space-between; align-items: center; margin-bottom: 32px; }
   .current-user { font-size: 10px; letter-spacing: 4px; color: #444; text-transform: uppercase; font-family: 'Helvetica Neue', sans-serif; }
@@ -40,36 +34,45 @@
   .remaining.ok { color: #7eb88a; }
   .remaining.over { color: #e07070; }
 
-  .progress-wrap { width: 100%; max-width: 400px; height: 3px; background: #1e1e1e; border-radius: 2px; margin-bottom: 28px; overflow: hidden; }
+  .progress-wrap { width: 100%; max-width: 400px; height: 3px; background: #1e1e1e; border-radius: 2px; margin-bottom: 20px; overflow: hidden; }
   .progress-bar { height: 100%; border-radius: 2px; transition: width 0.5s ease, background 0.3s; }
 
+  /* КБЖУ */
+  .macros-row { width: 100%; max-width: 400px; display: flex; gap: 8px; margin-bottom: 24px; }
+  .macro-box { flex: 1; background: #161616; border: 1px solid #1e1e1e; border-radius: 8px; padding: 10px 8px; text-align: center; }
+  .macro-val { font-size: 18px; font-variant-numeric: tabular-nums; }
+  .macro-lbl { font-size: 9px; letter-spacing: 2px; color: #444; text-transform: uppercase; font-family: 'Helvetica Neue', sans-serif; margin-top: 3px; }
+  .macro-unit { font-size: 10px; color: #444; }
+
   /* WATER */
-  .water-section { width: 100%; max-width: 400px; margin-bottom: 28px; }
+  .water-section { width: 100%; max-width: 400px; margin-bottom: 24px; }
   .water-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 10px; }
   .water-label { font-size: 10px; letter-spacing: 3px; color: #444; text-transform: uppercase; font-family: 'Helvetica Neue', sans-serif; }
   .water-amount { font-size: 14px; font-family: 'Helvetica Neue', sans-serif; }
   .water-amount span { font-size: 11px; color: #555; }
   .water-glasses { display: flex; gap: 6px; flex-wrap: wrap; }
-  .glass {
-    width: 36px; height: 44px; border: 1.5px solid #2a2a2a; border-radius: 4px;
-    cursor: pointer; display: flex; align-items: flex-end; justify-content: center;
-    padding-bottom: 3px; transition: all 0.2s; position: relative; overflow: hidden;
-    background: #111;
-  }
-  .glass.filled { border-color: #4a9eda; }
-  .glass.filled::before { content: ''; position: absolute; bottom: 0; left: 0; right: 0; height: 100%; background: #1a4a6a; }
-  .glass-icon { font-size: 16px; position: relative; z-index: 1; }
+  .glass { width: 36px; height: 44px; border: 1.5px solid #2a2a2a; border-radius: 4px; cursor: pointer; display: flex; align-items: center; justify-content: center; transition: all 0.2s; background: #111; }
+  .glass.filled { border-color: #4a9eda; background: #1a4a6a; }
+  .glass-icon { font-size: 16px; }
   .water-btns { display: flex; gap: 8px; margin-top: 10px; }
   .water-btn { flex: 1; background: #161616; border: 1px solid #2a2a2a; border-radius: 8px; padding: 10px; font-size: 12px; color: #888; cursor: pointer; font-family: 'Helvetica Neue', sans-serif; transition: all 0.2s; }
   .water-btn:active { background: #1a4a6a; color: #f0ede6; border-color: #4a9eda; }
 
-  /* API KEY */
+  /* STEPS */
+  .steps-section { width: 100%; max-width: 400px; margin-bottom: 24px; }
+  .steps-row { display: flex; align-items: center; gap: 10px; }
+  .steps-input { flex: 1; background: #161616; border: 1px solid #2a2a2a; border-radius: 8px; padding: 11px 14px; color: #f0ede6; font-size: 16px; font-family: 'Helvetica Neue', sans-serif; outline: none; transition: border-color 0.2s; }
+  .steps-input:focus { border-color: #444; }
+  .steps-input::placeholder { color: #2e2e2e; }
+  .steps-save { background: #1e1e1e; border: 1px solid #2a2a2a; border-radius: 8px; padding: 11px 16px; color: #888; font-size: 11px; letter-spacing: 2px; text-transform: uppercase; font-family: 'Helvetica Neue', sans-serif; cursor: pointer; white-space: nowrap; transition: all 0.2s; }
+  .steps-save:active { color: #f0ede6; border-color: #444; }
+  .steps-goal { font-size: 11px; color: #333; font-family: 'Helvetica Neue', sans-serif; margin-top: 5px; }
+
   .api-key-area { width: 100%; max-width: 400px; margin-bottom: 20px; }
   .api-key-area input { width: 100%; background: #161616; border: 1px solid #2a2a2a; border-radius: 10px; padding: 12px 16px; color: #f0ede6; font-size: 13px; font-family: 'Helvetica Neue', sans-serif; outline: none; transition: border-color 0.2s; }
   .api-key-area input:focus { border-color: #444; }
   .api-key-area input::placeholder { color: #2e2e2e; }
 
-  /* INPUT */
   .input-area { width: 100%; max-width: 400px; margin-bottom: 24px; }
   textarea { width: 100%; background: #161616; border: 1px solid #2a2a2a; border-radius: 10px; padding: 14px 16px; color: #f0ede6; font-size: 16px; font-family: 'Georgia', serif; resize: none; outline: none; line-height: 1.5; transition: border-color 0.2s; }
   textarea:focus { border-color: #444; }
@@ -79,38 +82,33 @@
   button.submit:disabled { opacity: 0.3; cursor: default; }
   .error { color: #e07070; font-size: 12px; text-align: center; margin-top: 8px; font-family: 'Helvetica Neue', sans-serif; }
 
-  /* DAY TABS */
   .day-tabs { display: flex; gap: 6px; margin-bottom: 16px; flex-wrap: wrap; justify-content: center; max-width: 400px; width: 100%; }
   .day-tab { background: #161616; border: 1px solid #2a2a2a; border-radius: 6px; padding: 6px 12px; font-size: 11px; color: #555; cursor: pointer; font-family: 'Helvetica Neue', sans-serif; transition: all 0.2s; }
   .day-tab.active { background: #f0ede6; color: #0e0e0e; border-color: #f0ede6; }
 
-  /* ENTRIES */
   .entries { width: 100%; max-width: 400px; }
-  .entry { display: flex; justify-content: space-between; align-items: center; padding: 13px 0; border-bottom: 1px solid #1a1a1a; animation: fadeIn 0.3s ease; }
+  .entry { display: flex; justify-content: space-between; align-items: center; padding: 11px 0; border-bottom: 1px solid #1a1a1a; animation: fadeIn 0.3s ease; }
   @keyframes fadeIn { from { opacity: 0; transform: translateY(-6px); } to { opacity: 1; transform: translateY(0); } }
-  .entry-name { font-size: 15px; color: #d0cdc6; flex: 1; padding-right: 12px; }
-  .entry-right { display: flex; align-items: center; gap: 10px; flex-shrink: 0; }
-  .entry-kcal { font-size: 16px; font-variant-numeric: tabular-nums; }
-  .entry-kcal span { font-size: 11px; color: #555; margin-left: 2px; }
+  .entry-name { font-size: 14px; color: #d0cdc6; flex: 1; padding-right: 8px; }
+  .entry-macros { font-size: 10px; color: #444; font-family: 'Helvetica Neue', sans-serif; margin-top: 2px; }
+  .entry-right { display: flex; align-items: center; gap: 8px; flex-shrink: 0; }
+  .entry-kcal { font-size: 15px; font-variant-numeric: tabular-nums; }
+  .entry-kcal span { font-size: 10px; color: #555; margin-left: 1px; }
   .del-btn { background: none; border: none; color: #333; font-size: 20px; cursor: pointer; padding: 0 2px; line-height: 1; }
   .del-btn:active { color: #e07070; }
-  .total-row { display: flex; justify-content: space-between; padding: 16px 0; border-top: 1px solid #2a2a2a; margin-top: 4px; }
+  .total-row { display: flex; justify-content: space-between; padding: 14px 0; border-top: 1px solid #2a2a2a; margin-top: 4px; }
   .total-row-label { font-size: 10px; letter-spacing: 3px; text-transform: uppercase; color: #555; font-family: 'Helvetica Neue', sans-serif; align-self: center; }
-  .total-row-val { font-size: 20px; }
+  .total-row-val { font-size: 18px; }
   .empty { text-align: center; color: #2e2e2e; font-size: 14px; padding: 40px 0; font-family: 'Helvetica Neue', sans-serif; }
 
-  /* AI SUMMARY */
   .summary-section { width: 100%; max-width: 400px; margin-top: 24px; }
   .summary-btn { width: 100%; background: none; border: 1px solid #2a2a2a; border-radius: 10px; padding: 14px; font-size: 11px; letter-spacing: 3px; text-transform: uppercase; color: #555; cursor: pointer; font-family: 'Helvetica Neue', sans-serif; transition: all 0.2s; }
-  .summary-btn:active { border-color: #444; color: #f0ede6; }
   .summary-btn:disabled { opacity: 0.3; }
   .summary-box { margin-top: 12px; background: #161616; border: 1px solid #2a2a2a; border-radius: 10px; padding: 16px; font-size: 14px; line-height: 1.7; color: #c0bdb6; font-family: 'Helvetica Neue', sans-serif; display: none; }
   .summary-box.visible { display: block; animation: fadeIn 0.3s ease; }
 
-  /* EXPORT */
   .export-btn { width: 100%; max-width: 400px; margin-top: 12px; background: none; border: 1px solid #1e1e1e; border-radius: 10px; padding: 12px; font-size: 10px; letter-spacing: 3px; text-transform: uppercase; color: #333; cursor: pointer; font-family: 'Helvetica Neue', sans-serif; transition: all 0.2s; }
   .export-btn:active { color: #888; border-color: #333; }
-
   .goal-note { margin-top: 32px; font-size: 10px; color: #2a2a2a; letter-spacing: 3px; font-family: 'Helvetica Neue', sans-serif; text-transform: uppercase; }
 </style>
 </head>
@@ -142,6 +140,26 @@
     <div class="progress-bar" id="progressBar" style="width:0%;background:#7eb88a;"></div>
   </div>
 
+  <!-- КБЖУ -->
+  <div class="macros-row">
+    <div class="macro-box">
+      <div class="macro-val" id="macroP">0<span class="macro-unit">գ</span></div>
+      <div class="macro-lbl">Սպիտակ</div>
+    </div>
+    <div class="macro-box">
+      <div class="macro-val" id="macroF">0<span class="macro-unit">գ</span></div>
+      <div class="macro-lbl">Ճարպ</div>
+    </div>
+    <div class="macro-box">
+      <div class="macro-val" id="macroC">0<span class="macro-unit">գ</span></div>
+      <div class="macro-lbl">Ածխաջ</div>
+    </div>
+    <div class="macro-box">
+      <div class="macro-val" id="macroFib">0<span class="macro-unit">գ</span></div>
+      <div class="macro-lbl">Թելք</div>
+    </div>
+  </div>
+
   <!-- WATER -->
   <div class="water-section">
     <div class="water-header">
@@ -150,11 +168,21 @@
     </div>
     <div class="water-glasses" id="waterGlasses"></div>
     <div class="water-btns">
-      <button class="water-btn" onclick="addWater(200)">+ 200մլ</button>
-      <button class="water-btn" onclick="addWater(250)">+ 250մլ</button>
-      <button class="water-btn" onclick="addWater(500)">+ 500մլ</button>
+      <button class="water-btn" onclick="addWater(200)">+200մլ</button>
+      <button class="water-btn" onclick="addWater(250)">+250մլ</button>
+      <button class="water-btn" onclick="addWater(500)">+500մլ</button>
       <button class="water-btn" onclick="resetWater()">↺</button>
     </div>
+  </div>
+
+  <!-- STEPS -->
+  <div class="steps-section">
+    <div class="field-label">Քայլեր</div>
+    <div class="steps-row">
+      <input class="steps-input" id="stepsInput" type="number" placeholder="0" min="0" max="99999" />
+      <button class="steps-save" onclick="saveSteps()">Պահել</button>
+    </div>
+    <div class="steps-goal" id="stepsGoal">Նպատակ՝ 10,000 քայլ</div>
   </div>
 
   <div class="api-key-area">
@@ -171,91 +199,86 @@
   <div class="day-tabs" id="dayTabs"></div>
   <div class="entries" id="entriesList"></div>
 
-  <!-- AI SUMMARY -->
   <div class="summary-section">
     <button class="summary-btn" id="summaryBtn" onclick="getSummary()">Օրվա վերլուծություն</button>
     <div class="summary-box" id="summaryBox"></div>
   </div>
 
-  <!-- EXPORT -->
-  <button class="export-btn" onclick="exportData()">Ներբեռնել պատմություն (JSON)</button>
-
-  <div class="goal-note">Նպատակ — 1500 կկ · 2000 մլ</div>
+  <button class="export-btn" onclick="exportData()">Ներբեռնել պատմություն (CSV)</button>
+  <div class="goal-note">Նպատակ — 1500 կկ · 2000 մլ · 10,000 քայլ</div>
 </div>
 
 <script>
 const GOAL_KCAL = 1500;
 const GOAL_WATER = 2000;
+const GOAL_STEPS = 10000;
 const GLASS_ML = 250;
-const STORAGE_USERS = "kcal_users_v3";
-const STORAGE_LAST  = "kcal_last_user";
+const STORAGE_USERS = "kcal_users_v4";
+const STORAGE_LAST = "kcal_last_user";
 
-let allUsers = {};
-let currentUser = null;
-let activeDay = todayKey();
+let allUsers = {}, currentUser = null, activeDay = todayKey();
 
 function todayKey() { return new Date().toISOString().slice(0, 10); }
 
 function loadAll() {
   try { allUsers = JSON.parse(localStorage.getItem(STORAGE_USERS)) || {}; } catch { allUsers = {}; }
-  // Migrate from old versions
-  ["kcal_users_v1", "kcal_users_v2"].forEach(oldKey => {
+  // Migrate old versions
+  ["kcal_users_v1","kcal_users_v2","kcal_users_v3"].forEach(oldKey => {
     try {
       const old = JSON.parse(localStorage.getItem(oldKey));
-      if (old) {
-        Object.keys(old).forEach(user => {
-          if (!allUsers[user]) allUsers[user] = old[user];
-          else {
-            // merge days
-            Object.keys(old[user].days || {}).forEach(day => {
-              if (!allUsers[user].days[day]) allUsers[user].days[day] = old[user].days[day];
-            });
-          }
+      if (!old) return;
+      Object.keys(old).forEach(user => {
+        if (!allUsers[user]) allUsers[user] = old[user];
+        else Object.keys(old[user].days||{}).forEach(day => {
+          if (!allUsers[user].days[day]) allUsers[user].days[day] = old[user].days[day];
         });
-        saveAll();
-      }
+      });
+      saveAll();
     } catch {}
   });
-  // Migrate from kcal_days_v2 (single-user old format)
   try {
     const oldDays = JSON.parse(localStorage.getItem("kcal_days_v2"));
-    const oldKey = localStorage.getItem("kcal_api_key");
+    const oldApiKey = localStorage.getItem("kcal_api_key");
     const oldLast = localStorage.getItem(STORAGE_LAST);
     if (oldDays && oldLast && !allUsers[oldLast]) {
-      allUsers[oldLast] = { days: oldDays, apiKey: oldKey || "" };
+      allUsers[oldLast] = { days: oldDays, apiKey: oldApiKey || "" };
       saveAll();
     }
   } catch {}
 }
+
 function saveAll() { localStorage.setItem(STORAGE_USERS, JSON.stringify(allUsers)); }
 
 function getUserData() {
   if (!allUsers[currentUser]) allUsers[currentUser] = { days: {}, apiKey: "" };
   return allUsers[currentUser];
 }
+
 function getDayData(k) {
   const ud = getUserData();
-  if (!ud.days[k]) ud.days[k] = { entries: [], water: 0 };
-  if (ud.days[k].water === undefined) ud.days[k].water = 0;
-  return ud.days[k];
+  if (!ud.days[k]) ud.days[k] = { entries: [], water: 0, steps: 0 };
+  const d = ud.days[k];
+  if (d.water === undefined) d.water = 0;
+  if (d.steps === undefined) d.steps = 0;
+  return d;
 }
 
-// ── LOGIN ─────────────────────────────────────────────────────
+// LOGIN
 function loginUser() {
   const name = document.getElementById("nameInput").value.trim();
   if (!name) return;
   currentUser = name;
   localStorage.setItem(STORAGE_LAST, name);
   if (!allUsers[name]) allUsers[name] = { days: {}, apiKey: "" };
-  saveAll();
-  activeDay = todayKey();
-  showApp();
+  saveAll(); activeDay = todayKey(); showApp();
 }
 
 function logout() {
   currentUser = null;
   document.getElementById("appScreen").style.display = "none";
   document.getElementById("loginScreen").style.display = "flex";
+  document.getElementById("loginScreen").style.flexDirection = "column";
+  document.getElementById("loginScreen").style.alignItems = "center";
   document.getElementById("nameInput").value = "";
   renderUserList();
 }
@@ -263,12 +286,9 @@ function logout() {
 function showApp() {
   document.getElementById("loginScreen").style.display = "none";
   const app = document.getElementById("appScreen");
-  app.style.display = "flex";
-  app.style.flexDirection = "column";
-  app.style.alignItems = "center";
+  app.style.display = "flex"; app.style.flexDirection = "column"; app.style.alignItems = "center";
   document.getElementById("currentUserLabel").textContent = currentUser;
-  const ud = getUserData();
-  document.getElementById("apiKey").value = ud.apiKey || "";
+  document.getElementById("apiKey").value = getUserData().apiKey || "";
   document.getElementById("summaryBox").classList.remove("visible");
   render();
 }
@@ -287,68 +307,77 @@ function renderUserList() {
 
 function quickLogin(name) { document.getElementById("nameInput").value = name; loginUser(); }
 function deleteUser(e, name) { e.stopPropagation(); delete allUsers[name]; saveAll(); renderUserList(); }
-
-// ── API KEY ───────────────────────────────────────────────────
 function saveKey(v) { getUserData().apiKey = v; saveAll(); }
 
-// ── WATER ─────────────────────────────────────────────────────
-function addWater(ml) {
-  const day = getDayData(activeDay);
-  day.water = Math.min(day.water + ml, 4000);
-  saveAll(); renderWater();
-}
-function resetWater() {
-  getDayData(activeDay).water = 0;
-  saveAll(); renderWater();
-}
+// WATER
+function addWater(ml) { const d = getDayData(activeDay); d.water = Math.min(d.water + ml, 4000); saveAll(); renderWater(); }
+function resetWater() { getDayData(activeDay).water = 0; saveAll(); renderWater(); }
 
 function renderWater() {
-  const day = getDayData(activeDay);
-  const ml = day.water || 0;
-  const glasses = Math.round(GOAL_WATER / GLASS_ML); // 8 glasses
-  const filled = Math.min(Math.round(ml / GLASS_ML), glasses);
-
+  const ml = getDayData(activeDay).water || 0;
+  const total = Math.round(GOAL_WATER / GLASS_ML);
+  const filled = Math.min(Math.round(ml / GLASS_ML), total);
   document.getElementById("waterAmount").innerHTML = `${ml} <span>մլ / ${GOAL_WATER} մլ</span>`;
-
-  const container = document.getElementById("waterGlasses");
-  container.innerHTML = "";
-  for (let i = 0; i < glasses; i++) {
+  const c = document.getElementById("waterGlasses"); c.innerHTML = "";
+  for (let i = 0; i < total; i++) {
     const g = document.createElement("div");
     g.className = "glass" + (i < filled ? " filled" : "");
     g.innerHTML = `<span class="glass-icon">${i < filled ? "💧" : "○"}</span>`;
-    g.onclick = () => {
-      const day = getDayData(activeDay);
-      day.water = (i + 1) * GLASS_ML;
-      saveAll(); renderWater();
-    };
-    container.appendChild(g);
+    g.onclick = () => { getDayData(activeDay).water = (i+1)*GLASS_ML; saveAll(); renderWater(); };
+    c.appendChild(g);
   }
 }
 
-// ── ENTRIES ───────────────────────────────────────────────────
+// STEPS
+function saveSteps() {
+  const val = parseInt(document.getElementById("stepsInput").value) || 0;
+  getDayData(activeDay).steps = val;
+  saveAll(); renderSteps();
+}
+
+function renderSteps() {
+  const steps = getDayData(activeDay).steps || 0;
+  document.getElementById("stepsInput").value = steps || "";
+  const pct = Math.round((steps / GOAL_STEPS) * 100);
+  document.getElementById("stepsGoal").textContent = steps
+    ? `${steps.toLocaleString()} քայլ — ${pct}% նպատակից`
+    : "Նպատակ՝ 10,000 քայլ";
+}
+
+// ENTRIES
 function removeEntry(id) {
-  const day = getDayData(activeDay);
-  day.entries = day.entries.filter(e => e.id !== id);
+  const d = getDayData(activeDay);
+  d.entries = d.entries.filter(e => e.id !== id);
   saveAll(); render();
 }
 
-// ── RENDER ────────────────────────────────────────────────────
+// RENDER
 function render() {
   const day = getDayData(activeDay);
   const total = day.entries.reduce((s, e) => s + e.kcal, 0);
+  const totalP = day.entries.reduce((s, e) => s + (e.protein||0), 0);
+  const totalF = day.entries.reduce((s, e) => s + (e.fat||0), 0);
+  const totalC = day.entries.reduce((s, e) => s + (e.carbs||0), 0);
+  const totalFib = day.entries.reduce((s, e) => s + (e.fiber||0), 0);
   const remaining = GOAL_KCAL - total;
   const pct = Math.min((total / GOAL_KCAL) * 100, 100);
 
   document.getElementById("totalDisplay").innerHTML = `${total} <span>կկ</span>`;
   const remEl = document.getElementById("remainingDisplay");
   if (remaining >= 0) { remEl.textContent = `Մնաց ${remaining} կկ`; remEl.className = "remaining ok"; }
-  else { remEl.textContent = `Գերազանցել ես ${Math.abs(remaining)} կկ-ով`; remEl.className = "remaining over"; }
+  else { remEl.textContent = `Գերազ. ${Math.abs(remaining)} կկ-ով`; remEl.className = "remaining over"; }
 
   const bar = document.getElementById("progressBar");
   bar.style.width = pct + "%";
   bar.style.background = pct > 100 ? "#e07070" : pct > 80 ? "#e0b870" : "#7eb88a";
 
+  document.getElementById("macroP").innerHTML = `${Math.round(totalP)}<span class="macro-unit">գ</span>`;
+  document.getElementById("macroF").innerHTML = `${Math.round(totalF)}<span class="macro-unit">գ</span>`;
+  document.getElementById("macroC").innerHTML = `${Math.round(totalC)}<span class="macro-unit">գ</span>`;
+  document.getElementById("macroFib").innerHTML = `${Math.round(totalFib)}<span class="macro-unit">գ</span>`;
+
   renderWater();
+  renderSteps();
 
   // Day tabs
   const ud = getUserData();
@@ -361,40 +390,36 @@ function render() {
       const btn = document.createElement("button");
       btn.className = "day-tab" + (k === activeDay ? " active" : "");
       btn.textContent = k;
-      btn.onclick = () => {
-        activeDay = k;
-        document.getElementById("summaryBox").classList.remove("visible");
-        render();
-      };
+      btn.onclick = () => { activeDay = k; document.getElementById("summaryBox").classList.remove("visible"); render(); };
       tabs.appendChild(btn);
     });
   }
 
   // Entries
-  const list = document.getElementById("entriesList");
-  list.innerHTML = "";
-  if (day.entries.length === 0) {
-    list.innerHTML = `<div class="empty">Դեռ ոչինչ չես գրել</div>`;
-    return;
-  }
+  const list = document.getElementById("entriesList"); list.innerHTML = "";
+  if (day.entries.length === 0) { list.innerHTML = `<div class="empty">Դեռ ոչինչ չես գրել</div>`; return; }
   day.entries.forEach(entry => {
-    const row = document.createElement("div");
-    row.className = "entry";
+    const row = document.createElement("div"); row.className = "entry";
+    const macroStr = (entry.protein||entry.fat||entry.carbs)
+      ? `Սպ ${Math.round(entry.protein||0)}գ · Ճ ${Math.round(entry.fat||0)}գ · Ած ${Math.round(entry.carbs||0)}գ`
+      : "";
     row.innerHTML = `
-      <div class="entry-name">${entry.name}</div>
+      <div>
+        <div class="entry-name">${entry.name}</div>
+        ${macroStr ? `<div class="entry-macros">${macroStr}</div>` : ""}
+      </div>
       <div class="entry-right">
         <div class="entry-kcal">${entry.kcal}<span>կկ</span></div>
         <button class="del-btn" onclick="removeEntry('${entry.id}')">×</button>
       </div>`;
     list.appendChild(row);
   });
-  const totalRow = document.createElement("div");
-  totalRow.className = "total-row";
+  const totalRow = document.createElement("div"); totalRow.className = "total-row";
   totalRow.innerHTML = `<div class="total-row-label">Ընդամենը</div><div class="total-row-val">${total} կկ</div>`;
   list.appendChild(totalRow);
 }
 
-// ── AI ANALYZE ────────────────────────────────────────────────
+// AI ANALYZE
 async function analyze() {
   const input = document.getElementById("foodInput").value.trim();
   const apiKey = document.getElementById("apiKey").value.trim();
@@ -402,116 +427,98 @@ async function analyze() {
   const err = document.getElementById("errorMsg");
   if (!input) return;
   if (!apiKey) { err.textContent = "API key մուտքագրիր"; return; }
-  err.textContent = "";
-  btn.disabled = true; btn.textContent = "Հաշվում...";
+  err.textContent = ""; btn.disabled = true; btn.textContent = "Հաշվում...";
   try {
     const res = await fetch("https://api.anthropic.com/v1/messages", {
       method: "POST",
       headers: { "Content-Type": "application/json", "x-api-key": apiKey, "anthropic-version": "2023-06-01", "anthropic-dangerous-direct-browser-access": "true" },
       body: JSON.stringify({
-        model: "claude-sonnet-4-5",
-        max_tokens: 1000,
-        system: `You are a calorie estimation assistant. The user describes food in Armenian or any language.
-Return ONLY a valid JSON object, no markdown, no explanation:
-{"items":[{"name":"...","kcal":number}],"total":number}
-Be realistic. For Armenian dishes use standard portions.`,
+        model: "claude-haiku-4-5", max_tokens: 1500,
+        system: `You are a nutrition assistant. User describes food in Armenian or any language.
+Return ONLY valid JSON, no markdown:
+{"items":[{"name":"...","kcal":number,"protein":number,"fat":number,"carbs":number,"fiber":number}],"total":number}
+All values in grams. Be realistic. Use standard portions for Armenian dishes.`,
         messages: [{ role: "user", content: input }]
       })
     });
     const data = await res.json();
     if (data.error) throw new Error(data.error.message);
-    const text = (data.content || []).find(b => b.type === "text")?.text || "";
-    const parsed = JSON.parse(text.replace(/```json|```/g, "").trim());
+    const text = (data.content||[]).find(b=>b.type==="text")?.text||"";
+    const parsed = JSON.parse(text.replace(/```json|```/g,"").trim());
     const day = getDayData(activeDay);
     parsed.items.forEach(item => {
-      day.entries.push({ id: Date.now() + "_" + Math.random().toString(36).slice(2), name: item.name, kcal: item.kcal });
+      day.entries.push({ id: Date.now()+"_"+Math.random().toString(36).slice(2), name: item.name, kcal: item.kcal, protein: item.protein||0, fat: item.fat||0, carbs: item.carbs||0, fiber: item.fiber||0 });
     });
     saveAll();
     document.getElementById("foodInput").value = "";
     document.getElementById("summaryBox").classList.remove("visible");
     render();
-  } catch(e) { document.getElementById("errorMsg").textContent = "Սխալ: " + (e.message || "Կրկնի՞ր"); }
+  } catch(e) { document.getElementById("errorMsg").textContent = "Սխալ: "+(e.message||"Կրկնի՞ր"); }
   btn.disabled = false; btn.textContent = "Հաշվել";
 }
 
-// ── AI SUMMARY ────────────────────────────────────────────────
+// AI SUMMARY
 async function getSummary() {
   const apiKey = document.getElementById("apiKey").value.trim();
   const btn = document.getElementById("summaryBtn");
   const box = document.getElementById("summaryBox");
   if (!apiKey) { box.textContent = "API key մուտքագրիր"; box.classList.add("visible"); return; }
-
   const day = getDayData(activeDay);
-  const total = day.entries.reduce((s, e) => s + e.kcal, 0);
-  const water = day.water || 0;
-  const foodList = day.entries.map(e => `${e.name} (${e.kcal}կկ)`).join(", ");
-
+  const total = day.entries.reduce((s,e)=>s+e.kcal,0);
+  const totalP = day.entries.reduce((s,e)=>s+(e.protein||0),0);
+  const totalF = day.entries.reduce((s,e)=>s+(e.fat||0),0);
+  const totalC = day.entries.reduce((s,e)=>s+(e.carbs||0),0);
+  const foodList = day.entries.map(e=>e.name).join(", ");
   if (!foodList) { box.textContent = "Ոչինչ չես գրել այս օրը։"; box.classList.add("visible"); return; }
-
-  btn.disabled = true; btn.textContent = "Վերլուծում...";
-  box.classList.remove("visible");
-
+  btn.disabled = true; btn.textContent = "Վերլուծում..."; box.classList.remove("visible");
   try {
     const res = await fetch("https://api.anthropic.com/v1/messages", {
       method: "POST",
       headers: { "Content-Type": "application/json", "x-api-key": apiKey, "anthropic-version": "2023-06-01", "anthropic-dangerous-direct-browser-access": "true" },
       body: JSON.stringify({
-        model: "claude-sonnet-4-5",
-        max_tokens: 400,
-        system: `Դու սննդի փորձագետ-բժիշկ ես։ Կարճ, ուղղակի, հայերեն պատասխանիր։ 2-4 նախադասություն max։ Ասա՝ ինչն է լավ, ինչն է վատ, ինչ փոխել։`,
-        messages: [{ role: "user", content: `Այսօր կերել եմ՝ ${foodList}. Ընդամենը ${total} կկ. Ջուր խմել եմ ${water} մլ (նպատակ 2000մլ)։ Վերլուծիր։` }]
+        model: "claude-haiku-4-5", max_tokens: 400,
+        system: `Դու սննդի փորձագետ-բժիշկ ես։ Կարճ, ուղղակի, հայերեն պատասխանիր։ 3-4 նախադասություն max։ Ասա ինչն է լավ, ինչն է վատ, ինչ փոխել։`,
+        messages: [{ role: "user", content: `Կերել եմ՝ ${foodList}. Կկ=${total}, Սպիտakucc=${Math.round(totalP)}գ, Ճ=${Math.round(totalF)}գ, Ած=${Math.round(totalC)}գ. Ջուր=${day.water||0}մլ. Քայлер=${day.steps||0}. Վերлуծиր։` }]
       })
     });
     const data = await res.json();
     if (data.error) throw new Error(data.error.message);
-    const text = (data.content || []).find(b => b.type === "text")?.text || "";
-    box.textContent = text;
+    box.textContent = (data.content||[]).find(b=>b.type==="text")?.text||"";
     box.classList.add("visible");
-  } catch(e) { box.textContent = "Սխալ: " + (e.message || "Կրկնի՞ր"); box.classList.add("visible"); }
-
-  btn.disabled = false; btn.textContent = "Օրվա վերլուծություն";
+  } catch(e) { box.textContent = "Սखаль: "+(e.message||"Կркнир"); box.classList.add("visible"); }
+  btn.disabled = false; btn.textContent = "Օрвա верлуцутюн";
 }
 
-// ── EXPORT ────────────────────────────────────────────────────
+// EXPORT
 function exportData() {
   const ud = getUserData();
-  const rows = ["Ամսաթիվ,Ուտելիք,Կկ,Ջուր(մլ)"];
+  const rows = ["Ամсаthив,Утелiq,Кк,Сп(г),Чарп(г),Адхаj(г),Жур(мл),Кайлер"];
   Object.keys(ud.days).sort().forEach(date => {
     const day = ud.days[date];
-    const water = day.water || 0;
-    if (day.entries.length === 0) {
-      rows.push(`${date},(դատարկ),0,${water}`);
-    } else {
-      day.entries.forEach((e, i) => {
-        rows.push(`${date},"${e.name}",${e.kcal},${i === 0 ? water : ""}`);
-      });
-    }
+    const water = day.water||0, steps = day.steps||0;
+    if (!day.entries.length) { rows.push(`${date},(դатарк),0,0,0,0,${water},${steps}`); return; }
+    day.entries.forEach((e,i) => {
+      rows.push(`${date},"${e.name}",${e.kcal},${Math.round(e.protein||0)},${Math.round(e.fat||0)},${Math.round(e.carbs||0)},${i===0?water:""},${i===0?steps:""}`);
+    });
   });
-  const csv = rows.join("\n");
-  const blob = new Blob(["\uFEFF" + csv], { type: "text/csv;charset=utf-8;" });
+  const blob = new Blob(["\uFEFF"+rows.join("\n")], {type:"text/csv;charset=utf-8;"});
   const url = URL.createObjectURL(blob);
-  const a = document.createElement("a");
-  a.href = url;
-  a.download = `calorie-history-${currentUser}-${todayKey()}.csv`;
-  a.click();
+  const a = document.createElement("a"); a.href=url; a.download=`calories-${currentUser}-${todayKey()}.csv`; a.click();
   URL.revokeObjectURL(url);
 }
 
-// ── INIT ──────────────────────────────────────────────────────
+// INIT
 loadAll();
 const last = localStorage.getItem(STORAGE_LAST);
-if (last && allUsers[last]) {
-  currentUser = last;
-  showApp();
-} else {
+if (last && allUsers[last]) { currentUser = last; showApp(); }
+else {
   renderUserList();
   document.getElementById("loginScreen").style.display = "flex";
   document.getElementById("loginScreen").style.flexDirection = "column";
   document.getElementById("loginScreen").style.alignItems = "center";
 }
-
 document.getElementById("foodInput").addEventListener("keydown", e => {
-  if (e.key === "Enter" && !e.shiftKey) { e.preventDefault(); analyze(); }
+  if (e.key==="Enter" && !e.shiftKey) { e.preventDefault(); analyze(); }
 });
 </script>
 </body>
