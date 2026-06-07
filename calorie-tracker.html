@@ -42,6 +42,7 @@
   .macro-box { flex: 1; background: #161616; border: 1px solid #1e1e1e; border-radius: 8px; padding: 10px 8px; text-align: center; }
   .macro-val { font-size: 18px; font-variant-numeric: tabular-nums; }
   .macro-lbl { font-size: 9px; letter-spacing: 2px; color: #444; text-transform: uppercase; font-family: 'Helvetica Neue', sans-serif; margin-top: 3px; }
+  .macro-norm { font-size: 9px; color: #333; font-family: 'Helvetica Neue', sans-serif; margin-top: 2px; }
   .macro-unit { font-size: 10px; color: #444; }
 
   /* WATER */
@@ -109,6 +110,11 @@
 
   .export-btn { width: 100%; max-width: 400px; margin-top: 12px; background: none; border: 1px solid #1e1e1e; border-radius: 10px; padding: 12px; font-size: 10px; letter-spacing: 3px; text-transform: uppercase; color: #333; cursor: pointer; font-family: 'Helvetica Neue', sans-serif; transition: all 0.2s; }
   .export-btn:active { color: #888; border-color: #333; }
+
+  /* MONTHLY ANALYSIS */
+  .monthly-section { width: 100%; max-width: 400px; margin-top: 12px; }
+  .month-select { width: 100%; background: #161616; border: 1px solid #2a2a2a; border-radius: 10px; padding: 12px 16px; color: #f0ede6; font-size: 14px; font-family: 'Helvetica Neue', sans-serif; outline: none; margin-bottom: 10px; appearance: none; cursor: pointer; }
+  .month-select option { background: #161616; }
   .goal-note { margin-top: 32px; font-size: 10px; color: #2a2a2a; letter-spacing: 3px; font-family: 'Helvetica Neue', sans-serif; text-transform: uppercase; }
 </style>
 </head>
@@ -145,18 +151,22 @@
     <div class="macro-box">
       <div class="macro-val" id="macroP">0<span class="macro-unit">գ</span></div>
       <div class="macro-lbl">Սպիտակ</div>
+      <div class="macro-norm">/ 130գ</div>
     </div>
     <div class="macro-box">
       <div class="macro-val" id="macroF">0<span class="macro-unit">գ</span></div>
       <div class="macro-lbl">Ճարպ</div>
+      <div class="macro-norm">/ 55գ</div>
     </div>
     <div class="macro-box">
       <div class="macro-val" id="macroC">0<span class="macro-unit">գ</span></div>
       <div class="macro-lbl">Ածխաջ</div>
+      <div class="macro-norm">/ 150գ</div>
     </div>
     <div class="macro-box">
       <div class="macro-val" id="macroFib">0<span class="macro-unit">գ</span></div>
       <div class="macro-lbl">Թելք</div>
+      <div class="macro-norm">/ 25գ</div>
     </div>
   </div>
 
@@ -202,6 +212,15 @@
   <div class="summary-section">
     <button class="summary-btn" id="summaryBtn" onclick="getSummary()">Օրվա վերլուծություն</button>
     <div class="summary-box" id="summaryBox"></div>
+  </div>
+
+
+  <!-- MONTHLY ANALYSIS -->
+  <div class="monthly-section">
+    <div class="field-label" style="margin-bottom:8px;">Ամսական վերлуծություն</div>
+    <select class="month-select" id="monthSelect"></select>
+    <button class="summary-btn" id="monthlyBtn" onclick="getMonthlyAnalysis()">Վերлуծել ամիসը</button>
+    <div class="summary-box" id="monthlyBox"></div>
   </div>
 
   <button class="export-btn" onclick="exportData()">Ներբեռնել պատմություն (CSV)</button>
@@ -290,6 +309,8 @@ function showApp() {
   document.getElementById("currentUserLabel").textContent = currentUser;
   document.getElementById("apiKey").value = getUserData().apiKey || "";
   document.getElementById("summaryBox").classList.remove("visible");
+  document.getElementById("monthlyBox").classList.remove("visible");
+  populateMonthSelect();
   render();
 }
 
@@ -505,6 +526,103 @@ function exportData() {
   const url = URL.createObjectURL(blob);
   const a = document.createElement("a"); a.href=url; a.download=`calories-${currentUser}-${todayKey()}.csv`; a.click();
   URL.revokeObjectURL(url);
+}
+
+
+// MONTHLY ANALYSIS
+function populateMonthSelect() {
+  const ud = getUserData();
+  const months = {};
+  Object.keys(ud.days).forEach(date => {
+    const m = date.slice(0, 7); // YYYY-MM
+    months[m] = true;
+  });
+  const sel = document.getElementById("monthSelect");
+  sel.innerHTML = "";
+  const sorted = Object.keys(months).sort().reverse();
+  if (sorted.length === 0) {
+    const opt = document.createElement("option");
+    opt.textContent = "Տвяла չкаn (дата нет)";
+    sel.appendChild(opt);
+    return;
+  }
+  sorted.forEach(m => {
+    const opt = document.createElement("option");
+    const [year, month] = m.split("-");
+    const monthNames = ["Հուն","Փետ","Մար","Ապր","Մայ","Հուն","Հուլ","Օգ","Սեպ","Հոկ","Նոյ","Դեկ"];
+    opt.value = m;
+    opt.textContent = `${monthNames[parseInt(month)-1]} ${year}`;
+    sel.appendChild(opt);
+  });
+}
+
+async function getMonthlyAnalysis() {
+  const apiKey = document.getElementById("apiKey").value.trim();
+  const btn = document.getElementById("monthlyBtn");
+  const box = document.getElementById("monthlyBox");
+  const sel = document.getElementById("monthSelect");
+  const selectedMonth = sel.value;
+
+  if (!apiKey) { box.textContent = "API key մուtкagrir"; box.classList.add("visible"); return; }
+  if (!selectedMonth) { box.textContent = "Ամис yntrir"; box.classList.add("visible"); return; }
+
+  const ud = getUserData();
+  const monthDays = Object.keys(ud.days).filter(d => d.startsWith(selectedMonth));
+
+  if (monthDays.length === 0) {
+    box.textContent = "Այд ամсум данных нет";
+    box.classList.add("visible"); return;
+  }
+
+  // Aggregate monthly data
+  let totalKcal = 0, totalP = 0, totalF = 0, totalC = 0, totalFib = 0, totalWater = 0;
+  let daysWithData = 0;
+  const allFoods = [];
+
+  monthDays.forEach(date => {
+    const day = ud.days[date];
+    if (day.entries && day.entries.length > 0) {
+      daysWithData++;
+      day.entries.forEach(e => {
+        totalKcal += e.kcal || 0;
+        totalP += e.protein || 0;
+        totalF += e.fat || 0;
+        totalC += e.carbs || 0;
+        totalFib += e.fiber || 0;
+        if (!allFoods.includes(e.name)) allFoods.push(e.name);
+      });
+    }
+    totalWater += day.water || 0;
+  });
+
+  if (daysWithData === 0) { box.textContent = "Այд ամсум керeli ничего нет"; box.classList.add("visible"); return; }
+
+  const avgKcal = Math.round(totalKcal / daysWithData);
+  const avgP = Math.round(totalP / daysWithData);
+  const avgF = Math.round(totalF / daysWithData);
+  const avgC = Math.round(totalC / daysWithData);
+  const avgFib = Math.round(totalFib / daysWithData);
+  const avgWater = Math.round(totalWater / daysWithData);
+
+  btn.disabled = true; btn.textContent = "Վерлуծуম..."; box.classList.remove("visible");
+
+  try {
+    const res = await fetch("https://api.anthropic.com/v1/messages", {
+      method: "POST",
+      headers: { "Content-Type": "application/json", "x-api-key": apiKey, "anthropic-version": "2023-06-01", "anthropic-dangerous-direct-browser-access": "true" },
+      body: JSON.stringify({
+        model: "claude-haiku-4-5", max_tokens: 600,
+        system: `Դու սննδаjin мутакирн-бжишк ес. Пататасхани хаjерен. Менк унenkk амсваjin тывяляльнер. Верлуц ев насир конкрет supplement-нер (оринак ձкан яг, D витамин, магний ев аjлн) аjн барацатцнерит вера, инч пакасум е: Кратк, гортнакан, 4-6 нахадасутюн.`,
+        messages: [{ role: "user", content: `Monthly summary (${daysWithData} days logged). Daily averages: ${avgKcal} kcal, Protein ${avgP}g (goal 130g), Fat ${avgF}g (goal 55g), Carbs ${avgC}g (goal 150g), Fiber ${avgFib}g (goal 25g), Water ${avgWater}ml (goal 2000ml). Foods eaten this month: ${allFoods.slice(0, 30).join(', ')}. What supplements are missing? Answer in Armenian.` }]
+      })
+    });
+    const data = await res.json();
+    if (data.error) throw new Error(data.error.message);
+    box.textContent = (data.content||[]).find(b=>b.type==="text")?.text || "";
+    box.classList.add("visible");
+  } catch(e) { box.textContent = "Скаль: " + (e.message||"Крнир"); box.classList.add("visible"); }
+
+  btn.disabled = false; btn.textContent = "Верлуծел амисе";
 }
 
 // INIT
