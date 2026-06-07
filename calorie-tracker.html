@@ -1,13 +1,13 @@
 <!DOCTYPE html>
-<html lang="hy">
+<html lang="en">
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0">
 <meta name="apple-mobile-web-app-capable" content="yes">
 <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
-<meta name="apple-mobile-web-app-title" content="Կկ">
+<meta name="apple-mobile-web-app-title" content="Cal">
 <meta name="theme-color" content="#0e0e0e">
-<title>Կալորիա</title>
+<title>Calorie Tracker</title>
 <style>
   * { margin: 0; padding: 0; box-sizing: border-box; -webkit-tap-highlight-color: transparent; }
   body { background: #0e0e0e; color: #f0ede6; font-family: 'Georgia', serif; min-height: 100vh; display: flex; flex-direction: column; align-items: center; padding: 48px 20px 80px; }
@@ -37,15 +37,13 @@
   .progress-wrap { width: 100%; max-width: 400px; height: 3px; background: #1e1e1e; border-radius: 2px; margin-bottom: 20px; overflow: hidden; }
   .progress-bar { height: 100%; border-radius: 2px; transition: width 0.5s ease, background 0.3s; }
 
-  /* КБЖУ */
   .macros-row { width: 100%; max-width: 400px; display: flex; gap: 8px; margin-bottom: 24px; }
   .macro-box { flex: 1; background: #161616; border: 1px solid #1e1e1e; border-radius: 8px; padding: 10px 8px; text-align: center; }
   .macro-val { font-size: 18px; font-variant-numeric: tabular-nums; }
   .macro-lbl { font-size: 9px; letter-spacing: 2px; color: #444; text-transform: uppercase; font-family: 'Helvetica Neue', sans-serif; margin-top: 3px; }
-  .macro-norm { font-size: 9px; color: #333; font-family: 'Helvetica Neue', sans-serif; margin-top: 2px; }
   .macro-unit { font-size: 10px; color: #444; }
+  .macro-norm { font-size: 10px; color: #2a2a2a; font-family: 'Helvetica Neue', sans-serif; margin-top: 3px; }
 
-  /* WATER */
   .water-section { width: 100%; max-width: 400px; margin-bottom: 24px; }
   .water-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 10px; }
   .water-label { font-size: 10px; letter-spacing: 3px; color: #444; text-transform: uppercase; font-family: 'Helvetica Neue', sans-serif; }
@@ -59,7 +57,6 @@
   .water-btn { flex: 1; background: #161616; border: 1px solid #2a2a2a; border-radius: 8px; padding: 10px; font-size: 12px; color: #888; cursor: pointer; font-family: 'Helvetica Neue', sans-serif; transition: all 0.2s; }
   .water-btn:active { background: #1a4a6a; color: #f0ede6; border-color: #4a9eda; }
 
-  /* STEPS */
   .steps-section { width: 100%; max-width: 400px; margin-bottom: 24px; }
   .steps-row { display: flex; align-items: center; gap: 10px; }
   .steps-input { flex: 1; background: #161616; border: 1px solid #2a2a2a; border-radius: 8px; padding: 11px 14px; color: #f0ede6; font-size: 16px; font-family: 'Helvetica Neue', sans-serif; outline: none; transition: border-color 0.2s; }
@@ -108,13 +105,12 @@
   .summary-box { margin-top: 12px; background: #161616; border: 1px solid #2a2a2a; border-radius: 10px; padding: 16px; font-size: 14px; line-height: 1.7; color: #c0bdb6; font-family: 'Helvetica Neue', sans-serif; display: none; }
   .summary-box.visible { display: block; animation: fadeIn 0.3s ease; }
 
-  .export-btn { width: 100%; max-width: 400px; margin-top: 12px; background: none; border: 1px solid #1e1e1e; border-radius: 10px; padding: 12px; font-size: 10px; letter-spacing: 3px; text-transform: uppercase; color: #333; cursor: pointer; font-family: 'Helvetica Neue', sans-serif; transition: all 0.2s; }
-  .export-btn:active { color: #888; border-color: #333; }
-
-  /* MONTHLY ANALYSIS */
   .monthly-section { width: 100%; max-width: 400px; margin-top: 12px; }
   .month-select { width: 100%; background: #161616; border: 1px solid #2a2a2a; border-radius: 10px; padding: 12px 16px; color: #f0ede6; font-size: 14px; font-family: 'Helvetica Neue', sans-serif; outline: none; margin-bottom: 10px; appearance: none; cursor: pointer; }
   .month-select option { background: #161616; }
+
+  .export-btn { width: 100%; max-width: 400px; margin-top: 12px; background: none; border: 1px solid #1e1e1e; border-radius: 10px; padding: 12px; font-size: 10px; letter-spacing: 3px; text-transform: uppercase; color: #333; cursor: pointer; font-family: 'Helvetica Neue', sans-serif; transition: all 0.2s; }
+  .export-btn:active { color: #888; border-color: #333; }
   .goal-note { margin-top: 32px; font-size: 10px; color: #2a2a2a; letter-spacing: 3px; font-family: 'Helvetica Neue', sans-serif; text-transform: uppercase; }
 </style>
 </head>
@@ -122,11 +118,11 @@
 
 <!-- LOGIN -->
 <div id="loginScreen">
-  <div class="login-title">Կալորիաների Հաշվիչ</div>
-  <div class="login-big">Ո՞վ ես</div>
-  <div class="field-label">Անուն</div>
-  <input class="login-input" id="nameInput" type="text" placeholder="Արամ, Մարո..." autocomplete="off" onkeydown="if(event.key==='Enter') loginUser()" />
-  <button class="submit" onclick="loginUser()" style="max-width:400px;width:100%;margin-bottom:32px;">Մուտք</button>
+  <div class="login-title">Calorie Tracker</div>
+  <div class="login-big">Who are you?</div>
+  <div class="field-label">Name</div>
+  <input class="login-input" id="nameInput" type="text" placeholder="Your name..." autocomplete="off" onkeydown="if(event.key==='Enter') loginUser()" />
+  <button class="submit" onclick="loginUser()" style="max-width:400px;width:100%;margin-bottom:32px;">Enter</button>
   <div id="userList"></div>
 </div>
 
@@ -134,65 +130,65 @@
 <div id="appScreen">
   <div class="top-bar">
     <div class="current-user" id="currentUserLabel"></div>
-    <button class="switch-btn" onclick="logout()">Փոխել</button>
+    <button class="switch-btn" onclick="logout()">Switch</button>
   </div>
 
   <div class="header">
-    <div class="total-kcal" id="totalDisplay">0 <span>կկ</span></div>
-    <div class="remaining ok" id="remainingDisplay">Մնաց 1500 կկ</div>
+    <div class="total-kcal" id="totalDisplay">0 <span>kcal</span></div>
+    <div class="remaining ok" id="remainingDisplay">Remaining 1500 kcal</div>
   </div>
 
   <div class="progress-wrap">
     <div class="progress-bar" id="progressBar" style="width:0%;background:#7eb88a;"></div>
   </div>
 
-  <!-- КБЖУ -->
+  <!-- MACROS -->
   <div class="macros-row">
     <div class="macro-box">
-      <div class="macro-val" id="macroP">0<span class="macro-unit">գ</span></div>
-      <div class="macro-lbl">Սպիտակ</div>
-      <div class="macro-norm">/ 130գ</div>
+      <div class="macro-val" id="macroP">0<span class="macro-unit">g</span></div>
+      <div class="macro-lbl">Protein</div>
+      <div class="macro-norm">/ 130g</div>
     </div>
     <div class="macro-box">
-      <div class="macro-val" id="macroF">0<span class="macro-unit">գ</span></div>
-      <div class="macro-lbl">Ճարպ</div>
-      <div class="macro-norm">/ 55գ</div>
+      <div class="macro-val" id="macroF">0<span class="macro-unit">g</span></div>
+      <div class="macro-lbl">Fat</div>
+      <div class="macro-norm">/ 55g</div>
     </div>
     <div class="macro-box">
-      <div class="macro-val" id="macroC">0<span class="macro-unit">գ</span></div>
-      <div class="macro-lbl">Ածխաջ</div>
-      <div class="macro-norm">/ 150գ</div>
+      <div class="macro-val" id="macroC">0<span class="macro-unit">g</span></div>
+      <div class="macro-lbl">Carbs</div>
+      <div class="macro-norm">/ 150g</div>
     </div>
     <div class="macro-box">
-      <div class="macro-val" id="macroFib">0<span class="macro-unit">գ</span></div>
-      <div class="macro-lbl">Թելք</div>
-      <div class="macro-norm">/ 25գ</div>
+      <div class="macro-val" id="macroFib">0<span class="macro-unit">g</span></div>
+      <div class="macro-lbl">Fiber</div>
+      <div class="macro-norm">/ 25g</div>
     </div>
   </div>
 
   <!-- WATER -->
   <div class="water-section">
     <div class="water-header">
-      <div class="water-label">Ջուր</div>
-      <div class="water-amount" id="waterAmount">0 <span>մլ / 2000 մլ</span></div>
+      <div class="water-label">Water</div>
+      <div class="water-amount" id="waterAmount">0 <span>ml / 2000ml</span></div>
     </div>
     <div class="water-glasses" id="waterGlasses"></div>
     <div class="water-btns">
-      <button class="water-btn" onclick="addWater(200)">+200մլ</button>
-      <button class="water-btn" onclick="addWater(250)">+250մլ</button>
-      <button class="water-btn" onclick="addWater(500)">+500մլ</button>
+      <button class="water-btn" onclick="addWater(200)">+200ml</button>
+      <button class="water-btn" onclick="addWater(250)">+250ml</button>
+      <button class="water-btn" onclick="addWater(500)">+500ml</button>
       <button class="water-btn" onclick="resetWater()">↺</button>
     </div>
   </div>
 
   <!-- STEPS -->
   <div class="steps-section">
-    <div class="field-label">Քայլեր</div>
+    <div class="field-label">Steps</div>
     <div class="steps-row">
       <input class="steps-input" id="stepsInput" type="number" placeholder="0" min="0" max="99999" />
-      <button class="steps-save" onclick="saveSteps()">Պահել</button>
+      <button class="steps-save" onclick="saveSteps()">Save</button>
     </div>
-    <div class="steps-goal" id="stepsGoal">Նպատակ՝ 10,000 քայլ</div>
+    <div class="steps-goal" id="stepsGoal">Goal: 10,000 steps</div>
   </div>
 
   <div class="api-key-area">
@@ -201,37 +197,34 @@
   </div>
 
   <div class="input-area">
-    <textarea id="foodInput" rows="3" placeholder="Գրիր ինչ կերար... (հայերեն կամ ռուսերեն)"></textarea>
-    <button class="submit" id="submitBtn" onclick="analyze()">Հաշվել</button>
+    <textarea id="foodInput" rows="3" placeholder="What did you eat? (Armenian or English)"></textarea>
+    <button class="submit" id="submitBtn" onclick="analyze()">Log Food</button>
     <div class="error" id="errorMsg"></div>
   </div>
 
   <div class="day-tabs" id="dayTabs"></div>
   <div class="entries" id="entriesList"></div>
 
+  <!-- DAILY ANALYSIS -->
   <div class="summary-section">
-    <button class="summary-btn" id="summaryBtn" onclick="getSummary()">Օրվա վերլուծություն</button>
+    <button class="summary-btn" id="summaryBtn" onclick="getSummary()">Daily Analysis</button>
     <div class="summary-box" id="summaryBox"></div>
   </div>
 
-
   <!-- MONTHLY ANALYSIS -->
   <div class="monthly-section">
-    <div class="field-label" style="margin-bottom:8px;">Ամսական վերлуծություն</div>
+    <div class="field-label" style="margin-bottom:8px;">Monthly Analysis</div>
     <select class="month-select" id="monthSelect"></select>
-    <button class="summary-btn" id="monthlyBtn" onclick="getMonthlyAnalysis()">Վերлуծել ամիসը</button>
+    <button class="summary-btn" id="monthlyBtn" onclick="getMonthlyAnalysis()">Analyze Month</button>
     <div class="summary-box" id="monthlyBox"></div>
   </div>
 
-  <button class="export-btn" onclick="exportData()">Ներբեռնել պատմություն (CSV)</button>
-  <div class="goal-note">Նպատակ — 1500 կկ · 2000 մլ · 10,000 քայլ</div>
+  <button class="export-btn" onclick="exportData()">Download History (CSV)</button>
+  <div class="goal-note">Goal — 1500 kcal · 2000ml · 10,000 steps</div>
 </div>
 
 <script>
-const GOAL_KCAL = 1500;
-const GOAL_WATER = 2000;
-const GOAL_STEPS = 10000;
-const GLASS_ML = 250;
+const GOAL_KCAL = 1500, GOAL_WATER = 2000, GOAL_STEPS = 10000, GLASS_ML = 250;
 const STORAGE_USERS = "kcal_users_v4";
 const STORAGE_LAST = "kcal_last_user";
 
@@ -241,7 +234,6 @@ function todayKey() { return new Date().toISOString().slice(0, 10); }
 
 function loadAll() {
   try { allUsers = JSON.parse(localStorage.getItem(STORAGE_USERS)) || {}; } catch { allUsers = {}; }
-  // Migrate old versions
   ["kcal_users_v1","kcal_users_v2","kcal_users_v3"].forEach(oldKey => {
     try {
       const old = JSON.parse(localStorage.getItem(oldKey));
@@ -317,7 +309,7 @@ function showApp() {
 function renderUserList() {
   const keys = Object.keys(allUsers);
   const list = document.getElementById("userList");
-  list.innerHTML = keys.length ? '<div class="field-label" style="margin-bottom:12px;">Նախկին օգտատերեր</div>' : "";
+  list.innerHTML = keys.length ? '<div class="field-label" style="margin-bottom:12px;">Previous users</div>' : "";
   keys.forEach(name => {
     const chip = document.createElement("span");
     chip.className = "user-chip";
@@ -338,7 +330,7 @@ function renderWater() {
   const ml = getDayData(activeDay).water || 0;
   const total = Math.round(GOAL_WATER / GLASS_ML);
   const filled = Math.min(Math.round(ml / GLASS_ML), total);
-  document.getElementById("waterAmount").innerHTML = `${ml} <span>մլ / ${GOAL_WATER} մլ</span>`;
+  document.getElementById("waterAmount").innerHTML = `${ml} <span>ml / ${GOAL_WATER}ml</span>`;
   const c = document.getElementById("waterGlasses"); c.innerHTML = "";
   for (let i = 0; i < total; i++) {
     const g = document.createElement("div");
@@ -361,8 +353,8 @@ function renderSteps() {
   document.getElementById("stepsInput").value = steps || "";
   const pct = Math.round((steps / GOAL_STEPS) * 100);
   document.getElementById("stepsGoal").textContent = steps
-    ? `${steps.toLocaleString()} քայլ — ${pct}% նպատակից`
-    : "Նպատակ՝ 10,000 քայլ";
+    ? `${steps.toLocaleString()} steps — ${pct}% of goal`
+    : "Goal: 10,000 steps";
 }
 
 // ENTRIES
@@ -375,32 +367,31 @@ function removeEntry(id) {
 // RENDER
 function render() {
   const day = getDayData(activeDay);
-  const total = day.entries.reduce((s, e) => s + e.kcal, 0);
-  const totalP = day.entries.reduce((s, e) => s + (e.protein||0), 0);
-  const totalF = day.entries.reduce((s, e) => s + (e.fat||0), 0);
-  const totalC = day.entries.reduce((s, e) => s + (e.carbs||0), 0);
-  const totalFib = day.entries.reduce((s, e) => s + (e.fiber||0), 0);
+  const total = day.entries.reduce((s,e) => s + e.kcal, 0);
+  const totalP = day.entries.reduce((s,e) => s + (e.protein||0), 0);
+  const totalF = day.entries.reduce((s,e) => s + (e.fat||0), 0);
+  const totalC = day.entries.reduce((s,e) => s + (e.carbs||0), 0);
+  const totalFib = day.entries.reduce((s,e) => s + (e.fiber||0), 0);
   const remaining = GOAL_KCAL - total;
   const pct = Math.min((total / GOAL_KCAL) * 100, 100);
 
-  document.getElementById("totalDisplay").innerHTML = `${total} <span>կկ</span>`;
+  document.getElementById("totalDisplay").innerHTML = `${total} <span>kcal</span>`;
   const remEl = document.getElementById("remainingDisplay");
-  if (remaining >= 0) { remEl.textContent = `Մնաց ${remaining} կկ`; remEl.className = "remaining ok"; }
-  else { remEl.textContent = `Գերազ. ${Math.abs(remaining)} կկ-ով`; remEl.className = "remaining over"; }
+  if (remaining >= 0) { remEl.textContent = `Remaining ${remaining} kcal`; remEl.className = "remaining ok"; }
+  else { remEl.textContent = `Over by ${Math.abs(remaining)} kcal`; remEl.className = "remaining over"; }
 
   const bar = document.getElementById("progressBar");
   bar.style.width = pct + "%";
   bar.style.background = pct > 100 ? "#e07070" : pct > 80 ? "#e0b870" : "#7eb88a";
 
-  document.getElementById("macroP").innerHTML = `${Math.round(totalP)}<span class="macro-unit">գ</span>`;
-  document.getElementById("macroF").innerHTML = `${Math.round(totalF)}<span class="macro-unit">գ</span>`;
-  document.getElementById("macroC").innerHTML = `${Math.round(totalC)}<span class="macro-unit">գ</span>`;
-  document.getElementById("macroFib").innerHTML = `${Math.round(totalFib)}<span class="macro-unit">գ</span>`;
+  document.getElementById("macroP").innerHTML = `${Math.round(totalP)}<span class="macro-unit">g</span>`;
+  document.getElementById("macroF").innerHTML = `${Math.round(totalF)}<span class="macro-unit">g</span>`;
+  document.getElementById("macroC").innerHTML = `${Math.round(totalC)}<span class="macro-unit">g</span>`;
+  document.getElementById("macroFib").innerHTML = `${Math.round(totalFib)}<span class="macro-unit">g</span>`;
 
   renderWater();
   renderSteps();
 
-  // Day tabs
   const ud = getUserData();
   const allKeys = Object.keys(ud.days).sort().reverse();
   if (!allKeys.includes(activeDay)) allKeys.unshift(activeDay);
@@ -416,13 +407,12 @@ function render() {
     });
   }
 
-  // Entries
   const list = document.getElementById("entriesList"); list.innerHTML = "";
-  if (day.entries.length === 0) { list.innerHTML = `<div class="empty">Դեռ ոչինչ չես գրել</div>`; return; }
+  if (day.entries.length === 0) { list.innerHTML = `<div class="empty">Nothing logged yet</div>`; return; }
   day.entries.forEach(entry => {
     const row = document.createElement("div"); row.className = "entry";
     const macroStr = (entry.protein||entry.fat||entry.carbs)
-      ? `Սպ ${Math.round(entry.protein||0)}գ · Ճ ${Math.round(entry.fat||0)}գ · Ած ${Math.round(entry.carbs||0)}գ`
+      ? `P ${Math.round(entry.protein||0)}g · F ${Math.round(entry.fat||0)}g · C ${Math.round(entry.carbs||0)}g`
       : "";
     row.innerHTML = `
       <div>
@@ -430,13 +420,13 @@ function render() {
         ${macroStr ? `<div class="entry-macros">${macroStr}</div>` : ""}
       </div>
       <div class="entry-right">
-        <div class="entry-kcal">${entry.kcal}<span>կկ</span></div>
+        <div class="entry-kcal">${entry.kcal}<span>kcal</span></div>
         <button class="del-btn" onclick="removeEntry('${entry.id}')">×</button>
       </div>`;
     list.appendChild(row);
   });
   const totalRow = document.createElement("div"); totalRow.className = "total-row";
-  totalRow.innerHTML = `<div class="total-row-label">Ընդամենը</div><div class="total-row-val">${total} կկ</div>`;
+  totalRow.innerHTML = `<div class="total-row-label">Total</div><div class="total-row-val">${total} kcal</div>`;
   list.appendChild(totalRow);
 }
 
@@ -447,18 +437,18 @@ async function analyze() {
   const btn = document.getElementById("submitBtn");
   const err = document.getElementById("errorMsg");
   if (!input) return;
-  if (!apiKey) { err.textContent = "API key մուտքագրիր"; return; }
-  err.textContent = ""; btn.disabled = true; btn.textContent = "Հաշվում...";
+  if (!apiKey) { err.textContent = "Enter your API key first"; return; }
+  err.textContent = ""; btn.disabled = true; btn.textContent = "Calculating...";
   try {
     const res = await fetch("https://api.anthropic.com/v1/messages", {
       method: "POST",
       headers: { "Content-Type": "application/json", "x-api-key": apiKey, "anthropic-version": "2023-06-01", "anthropic-dangerous-direct-browser-access": "true" },
       body: JSON.stringify({
-        model: "claude-haiku-4-5", max_tokens: 1500,
-        system: `You are a nutrition assistant. User describes food in Armenian or any language.
+        model: "claude-haiku-4-5", max_tokens: 1000,
+        system: `You are a nutrition assistant. User describes food in Armenian or English.
 Return ONLY valid JSON, no markdown:
 {"items":[{"name":"...","kcal":number,"protein":number,"fat":number,"carbs":number,"fiber":number}],"total":number}
-All values in grams. Be realistic. Use standard portions for Armenian dishes.`,
+All macro values in grams. Be realistic. Use standard portions.`,
         messages: [{ role: "user", content: input }]
       })
     });
@@ -474,82 +464,59 @@ All values in grams. Be realistic. Use standard portions for Armenian dishes.`,
     document.getElementById("foodInput").value = "";
     document.getElementById("summaryBox").classList.remove("visible");
     render();
-  } catch(e) { document.getElementById("errorMsg").textContent = "Սխալ: "+(e.message||"Կրկնի՞ր"); }
-  btn.disabled = false; btn.textContent = "Հաշվել";
+  } catch(e) { document.getElementById("errorMsg").textContent = "Error: "+(e.message||"Try again"); }
+  btn.disabled = false; btn.textContent = "Log Food";
 }
 
-// AI SUMMARY
+// DAILY ANALYSIS
 async function getSummary() {
   const apiKey = document.getElementById("apiKey").value.trim();
   const btn = document.getElementById("summaryBtn");
   const box = document.getElementById("summaryBox");
-  if (!apiKey) { box.textContent = "API key մուտքագրիր"; box.classList.add("visible"); return; }
+  if (!apiKey) { box.textContent = "Enter your API key first"; box.classList.add("visible"); return; }
   const day = getDayData(activeDay);
   const total = day.entries.reduce((s,e)=>s+e.kcal,0);
   const totalP = day.entries.reduce((s,e)=>s+(e.protein||0),0);
   const totalF = day.entries.reduce((s,e)=>s+(e.fat||0),0);
   const totalC = day.entries.reduce((s,e)=>s+(e.carbs||0),0);
   const foodList = day.entries.map(e=>e.name).join(", ");
-  if (!foodList) { box.textContent = "Ոչինչ չես գրել այս օրը։"; box.classList.add("visible"); return; }
-  btn.disabled = true; btn.textContent = "Վերլուծում..."; box.classList.remove("visible");
+  if (!foodList) { box.textContent = "Nothing logged today."; box.classList.add("visible"); return; }
+  btn.disabled = true; btn.textContent = "Analyzing..."; box.classList.remove("visible");
   try {
     const res = await fetch("https://api.anthropic.com/v1/messages", {
       method: "POST",
       headers: { "Content-Type": "application/json", "x-api-key": apiKey, "anthropic-version": "2023-06-01", "anthropic-dangerous-direct-browser-access": "true" },
       body: JSON.stringify({
-        model: "claude-haiku-4-5", max_tokens: 400,
-        system: `Դու սննդի փորձագետ-բժիշկ ես։ Կարճ, ուղղակի, հայերեն պատասխանիր։ 3-4 նախադասություն max։ Ասա ինչն է լավ, ինչն է վատ, ինչ փոխել։`,
-        messages: [{ role: "user", content: `Կերել եմ՝ ${foodList}. Կկ=${total}, Սպիտakucc=${Math.round(totalP)}գ, Ճ=${Math.round(totalF)}գ, Ած=${Math.round(totalC)}գ. Ջուր=${day.water||0}մլ. Քայлер=${day.steps||0}. Վերлуծиր։` }]
+        model: "claude-haiku-4-5", max_tokens: 300,
+        system: `You are a nutrition expert. Reply in English. Be direct and concise — 3-4 sentences max. State what's good, what's missing, what to change.`,
+        messages: [{ role: "user", content: `Today's food: ${foodList}. Total: ${total} kcal, Protein: ${Math.round(totalP)}g (goal 130g), Fat: ${Math.round(totalF)}g (goal 55g), Carbs: ${Math.round(totalC)}g (goal 150g). Water: ${day.water||0}ml (goal 2000ml). Steps: ${day.steps||0} (goal 10000). Analyze briefly.` }]
       })
     });
     const data = await res.json();
     if (data.error) throw new Error(data.error.message);
     box.textContent = (data.content||[]).find(b=>b.type==="text")?.text||"";
     box.classList.add("visible");
-  } catch(e) { box.textContent = "Սखаль: "+(e.message||"Կркнир"); box.classList.add("visible"); }
-  btn.disabled = false; btn.textContent = "Օрвա верлуцутюн";
+  } catch(e) { box.textContent = "Error: "+(e.message||"Try again"); box.classList.add("visible"); }
+  btn.disabled = false; btn.textContent = "Daily Analysis";
 }
-
-// EXPORT
-function exportData() {
-  const ud = getUserData();
-  const rows = ["Ամсаthив,Утелiq,Кк,Сп(г),Чарп(г),Адхаj(г),Жур(мл),Кайлер"];
-  Object.keys(ud.days).sort().forEach(date => {
-    const day = ud.days[date];
-    const water = day.water||0, steps = day.steps||0;
-    if (!day.entries.length) { rows.push(`${date},(դатарк),0,0,0,0,${water},${steps}`); return; }
-    day.entries.forEach((e,i) => {
-      rows.push(`${date},"${e.name}",${e.kcal},${Math.round(e.protein||0)},${Math.round(e.fat||0)},${Math.round(e.carbs||0)},${i===0?water:""},${i===0?steps:""}`);
-    });
-  });
-  const blob = new Blob(["\uFEFF"+rows.join("\n")], {type:"text/csv;charset=utf-8;"});
-  const url = URL.createObjectURL(blob);
-  const a = document.createElement("a"); a.href=url; a.download=`calories-${currentUser}-${todayKey()}.csv`; a.click();
-  URL.revokeObjectURL(url);
-}
-
 
 // MONTHLY ANALYSIS
 function populateMonthSelect() {
   const ud = getUserData();
   const months = {};
-  Object.keys(ud.days).forEach(date => {
-    const m = date.slice(0, 7); // YYYY-MM
-    months[m] = true;
-  });
+  Object.keys(ud.days).forEach(date => { months[date.slice(0,7)] = true; });
   const sel = document.getElementById("monthSelect");
   sel.innerHTML = "";
   const sorted = Object.keys(months).sort().reverse();
-  if (sorted.length === 0) {
+  if (!sorted.length) {
     const opt = document.createElement("option");
-    opt.textContent = "Տвяла չкаn (дата нет)";
-    sel.appendChild(opt);
-    return;
+    opt.textContent = "No data yet";
+    sel.appendChild(opt); return;
   }
+  const monthNames = ["Jan","Feb","Mar","Apr","May","Jun","Jul","Aug","Sep","Oct","Nov","Dec"];
   sorted.forEach(m => {
-    const opt = document.createElement("option");
     const [year, month] = m.split("-");
-    const monthNames = ["Հուն","Փետ","Մար","Ապր","Մայ","Հուն","Հուլ","Օգ","Սեպ","Հոկ","Նոյ","Դեկ"];
+    const opt = document.createElement("option");
     opt.value = m;
     opt.textContent = `${monthNames[parseInt(month)-1]} ${year}`;
     sel.appendChild(opt);
@@ -560,69 +527,68 @@ async function getMonthlyAnalysis() {
   const apiKey = document.getElementById("apiKey").value.trim();
   const btn = document.getElementById("monthlyBtn");
   const box = document.getElementById("monthlyBox");
-  const sel = document.getElementById("monthSelect");
-  const selectedMonth = sel.value;
-
-  if (!apiKey) { box.textContent = "API key մուtкagrir"; box.classList.add("visible"); return; }
-  if (!selectedMonth) { box.textContent = "Ամис yntrir"; box.classList.add("visible"); return; }
+  const selectedMonth = document.getElementById("monthSelect").value;
+  if (!apiKey) { box.textContent = "Enter your API key first"; box.classList.add("visible"); return; }
+  if (!selectedMonth) { box.textContent = "Select a month"; box.classList.add("visible"); return; }
 
   const ud = getUserData();
   const monthDays = Object.keys(ud.days).filter(d => d.startsWith(selectedMonth));
+  if (!monthDays.length) { box.textContent = "No data for this month."; box.classList.add("visible"); return; }
 
-  if (monthDays.length === 0) {
-    box.textContent = "Այд ամсум данных нет";
-    box.classList.add("visible"); return;
-  }
-
-  // Aggregate monthly data
-  let totalKcal = 0, totalP = 0, totalF = 0, totalC = 0, totalFib = 0, totalWater = 0;
-  let daysWithData = 0;
+  let totalKcal=0, totalP=0, totalF=0, totalC=0, totalFib=0, totalWater=0, daysWithData=0;
   const allFoods = [];
-
   monthDays.forEach(date => {
     const day = ud.days[date];
     if (day.entries && day.entries.length > 0) {
       daysWithData++;
       day.entries.forEach(e => {
-        totalKcal += e.kcal || 0;
-        totalP += e.protein || 0;
-        totalF += e.fat || 0;
-        totalC += e.carbs || 0;
-        totalFib += e.fiber || 0;
+        totalKcal += e.kcal||0; totalP += e.protein||0; totalF += e.fat||0;
+        totalC += e.carbs||0; totalFib += e.fiber||0;
         if (!allFoods.includes(e.name)) allFoods.push(e.name);
       });
     }
-    totalWater += day.water || 0;
+    totalWater += day.water||0;
   });
 
-  if (daysWithData === 0) { box.textContent = "Այд ամсум керeli ничего нет"; box.classList.add("visible"); return; }
+  if (!daysWithData) { box.textContent = "No food entries this month."; box.classList.add("visible"); return; }
 
-  const avgKcal = Math.round(totalKcal / daysWithData);
-  const avgP = Math.round(totalP / daysWithData);
-  const avgF = Math.round(totalF / daysWithData);
-  const avgC = Math.round(totalC / daysWithData);
-  const avgFib = Math.round(totalFib / daysWithData);
-  const avgWater = Math.round(totalWater / daysWithData);
-
-  btn.disabled = true; btn.textContent = "Վерлуծуম..."; box.classList.remove("visible");
+  const avg = v => Math.round(v / daysWithData);
+  btn.disabled = true; btn.textContent = "Analyzing..."; box.classList.remove("visible");
 
   try {
     const res = await fetch("https://api.anthropic.com/v1/messages", {
       method: "POST",
       headers: { "Content-Type": "application/json", "x-api-key": apiKey, "anthropic-version": "2023-06-01", "anthropic-dangerous-direct-browser-access": "true" },
       body: JSON.stringify({
-        model: "claude-haiku-4-5", max_tokens: 600,
-        system: `Դու սննδаjin мутакирн-бжишк ес. Пататасхани хаjерен. Менк унenkk амсваjin тывяляльнер. Верлуц ев насир конкрет supplement-нер (оринак ձкан яг, D витамин, магний ев аjлн) аjн барацатцнерит вера, инч пакасум е: Кратк, гортнакан, 4-6 нахадасутюн.`,
-        messages: [{ role: "user", content: `Monthly summary (${daysWithData} days logged). Daily averages: ${avgKcal} kcal, Protein ${avgP}g (goal 130g), Fat ${avgF}g (goal 55g), Carbs ${avgC}g (goal 150g), Fiber ${avgFib}g (goal 25g), Water ${avgWater}ml (goal 2000ml). Foods eaten this month: ${allFoods.slice(0, 30).join(', ')}. What supplements are missing? Answer in Armenian.` }]
+        model: "claude-haiku-4-5", max_tokens: 500,
+        system: `You are a nutrition expert. Reply in English. Analyze monthly nutrition data and recommend specific supplements (e.g. fish oil/omega-3, vitamin D, magnesium, zinc, B12, iron, etc.) based on what is consistently low or missing. Be specific, practical, and concise. 4-6 sentences.`,
+        messages: [{ role: "user", content: `Monthly summary (${daysWithData} days logged). Daily averages: ${avg(totalKcal)} kcal, Protein ${avg(totalP)}g (goal 130g), Fat ${avg(totalF)}g (goal 55g), Carbs ${avg(totalC)}g (goal 150g), Fiber ${avg(totalFib)}g (goal 25g), Water ${avg(totalWater)}ml (goal 2000ml). Foods eaten this month: ${allFoods.slice(0,30).join(", ")}. What supplements are recommended based on what's missing?` }]
       })
     });
     const data = await res.json();
     if (data.error) throw new Error(data.error.message);
-    box.textContent = (data.content||[]).find(b=>b.type==="text")?.text || "";
+    box.textContent = (data.content||[]).find(b=>b.type==="text")?.text||"";
     box.classList.add("visible");
-  } catch(e) { box.textContent = "Скаль: " + (e.message||"Крнир"); box.classList.add("visible"); }
+  } catch(e) { box.textContent = "Error: "+(e.message||"Try again"); box.classList.add("visible"); }
+  btn.disabled = false; btn.textContent = "Analyze Month";
+}
 
-  btn.disabled = false; btn.textContent = "Верлуծел амисе";
+// EXPORT
+function exportData() {
+  const ud = getUserData();
+  const rows = ["Date,Food,Kcal,Protein(g),Fat(g),Carbs(g),Water(ml),Steps"];
+  Object.keys(ud.days).sort().forEach(date => {
+    const day = ud.days[date];
+    const water = day.water||0, steps = day.steps||0;
+    if (!day.entries || !day.entries.length) { rows.push(`${date},(empty),0,0,0,0,${water},${steps}`); return; }
+    day.entries.forEach((e,i) => {
+      rows.push(`${date},"${e.name}",${e.kcal},${Math.round(e.protein||0)},${Math.round(e.fat||0)},${Math.round(e.carbs||0)},${i===0?water:""},${i===0?steps:""}`);
+    });
+  });
+  const blob = new Blob([rows.join("\n")], {type:"text/csv;charset=utf-8;"});
+  const url = URL.createObjectURL(blob);
+  const a = document.createElement("a"); a.href=url; a.download=`nutrition-${currentUser}-${todayKey()}.csv`; a.click();
+  URL.revokeObjectURL(url);
 }
 
 // INIT
